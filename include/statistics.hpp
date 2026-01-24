@@ -75,7 +75,7 @@ template <BookComparator Comparator>
 auto getTopNBy(std::span<Book> s, size_t N, Comparator comp) {
     const auto mid_pos = std::min(N, s.size());
     auto middle = std::next(s.begin(), mid_pos);
-    std::partial_sort(s.begin(), middle, s.end(), comp);
+    std::partial_sort(s.begin(), middle, s.end(), std::not_fn(comp));
     std::vector<std::reference_wrapper<const Book>> result;
     result.reserve(N);
     std::transform(s.begin(), middle, std::back_inserter(result), [](auto &x) { return std::cref<Book>(x); });
