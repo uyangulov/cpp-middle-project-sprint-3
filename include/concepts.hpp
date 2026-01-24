@@ -11,15 +11,15 @@ template <typename T>
 concept BookContainerLike = true;
 
 template <typename T>
-concept BookIterator = true;
+concept BookIterator = std::forward_iterator<T>;
 
 template <typename S, typename I>
 concept BookSentinel = true;
 
 template <typename P>
-concept BookPredicate = true;
+concept BookPredicate = std::predicate<P, const Book &>;
 
 template <typename C>
-concept BookComparator = true;
+concept BookComparator = std::predicate<C, const Book &, const Book &>;
 
 }  // namespace bookdb
