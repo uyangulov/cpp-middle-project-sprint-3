@@ -11,7 +11,26 @@ enum class Genre { Fiction, NonFiction, SciFi, Biography, Mystery, Unknown };
 // Ваш код для constexpr преобразования строк в enum::Genre и наоборот здесь
 
 constexpr Genre GenreFromString(std::string_view s) {
-    // Ваш код здесь
+
+    if (s == "Fiction")
+        return Genre::Fiction;
+    if (s == "NonFiction")
+        return Genre::NonFiction;
+    if (s == "Non-Fiction")
+        return Genre::NonFiction;
+    if (s == "Non Fiction")
+        return Genre::NonFiction;
+    if (s == "SciFi")
+        return Genre::SciFi;
+    if (s == "Sci-Fi")
+        return Genre::SciFi;
+    if (s == "ScienceFiction")
+        return Genre::SciFi;
+    if (s == "Biography")
+        return Genre::Biography;
+    if (s == "Mystery")
+        return Genre::Mystery;
+
     return Genre::Unknown;
 }
 
@@ -25,13 +44,20 @@ struct Book {
     double rating;
     int read_count;
 
-    // Ваш код для конструкторов здесь
+    Book(std::string_view title, std::string_view author, int year, Genre genre, double rating, int read_count)
+        : author(author), title(title), year(year), genre(genre), rating(rating), read_count(read_count) {}
+
+    Book(std::string_view title, std::string_view author, int year, std::string_view genre, double rating,
+         int read_count)
+        : author(author), title(title), year(year), genre(GenreFromString(genre)), rating(rating),
+          read_count(read_count) {}
 };
 }  // namespace bookdb
 
 namespace std {
 template <>
 struct formatter<bookdb::Genre, char> {
+
     template <typename FormatContext>
     auto format(const bookdb::Genre g, FormatContext &fc) const {
         std::string genre_str;
@@ -57,6 +83,18 @@ struct formatter<bookdb::Genre, char> {
     }
 };
 
-// Ваш код для std::formatter<Book> здесь
+template <>
+struct formatter<bookdb::Book> {
+    template <typename FormatContext>
+    auto format(const bookdb::Book &book, FormatContext &fc) const {
+        format_to(fc.out(), "{}. Written in {} by {}. Genre: {}. Read {} times. Rating {} \n", book.title, book.year,
+                  book.author, book.genre, book.read_count, book.rating);
+        return fc.out();
+    }
+
+    constexpr auto parse(format_parse_context &ctx) {
+        return ctx.begin();  // Просто игнорируем пользовательский формат
+    }
+};
 
 }  // namespace std

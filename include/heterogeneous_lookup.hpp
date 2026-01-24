@@ -1,5 +1,6 @@
 #pragma once
 
+#include "book.hpp"
 #include <string>
 #include <string_view>
 
