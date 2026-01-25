@@ -61,11 +61,11 @@ public:
 
     size_t size() const { return books_.size(); }
 
-    const_iterator begin() const { return books_.begin(); }
+    const_iterator begin() const { return books_.cbegin(); }
 
     iterator begin() { return books_.begin(); }
 
-    const_iterator end() const { return books_.end(); }
+    const_iterator end() const { return books_.cend(); }
 
     iterator end() { return books_.end(); }
 
