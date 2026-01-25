@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <flat_set>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "book.hpp"
@@ -29,12 +30,16 @@ public:
     }
 
     void PushBack(const Book &book) {
-        authors_.insert(static_cast<std::string>(book.author));
+        // Реализации вставки получились немного корявыми, не уверен, что будет работать без
+        // провисших ссылок, в случае, если среди Args есть string с ограниченным временем жизни
+        auto res = authors_.insert(static_cast<std::string>(book.author));
         books_.push_back(book);
     }
 
     void PushBack(Book &&book) {
-        authors_.insert(static_cast<std::string>(book.author));
+        // Реализации вставки получились немного корявыми, не уверен, что будет работать без
+        // провисших ссылок, в случае, если среди Args есть string с ограниченным временем жизни
+        auto res = authors_.insert(static_cast<std::string>(book.author));
         books_.push_back(std::move(book));
     }
 
@@ -42,9 +47,11 @@ public:
     void EmplaceBack(Args &&...args)
         requires std::constructible_from<Book, Args &&...>
     {
+        // Реализации вставки получились немного корявыми, не уверен, что будет работать без
+        // провисших ссылок, в случае, если среди Args есть string с ограниченным временем жизни
         auto arg_tuple = std::forward_as_tuple(std::forward<Args>(args)...);
         auto &&author_arg = std::get<1>(arg_tuple);
-        authors_.insert(static_cast<std::string>(author_arg));
+        auto res = authors_.insert(static_cast<std::string>(author_arg));
         books_.emplace_back(std::forward<Args>(args)...);
     }
 
