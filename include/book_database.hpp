@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <flat_set>
 #include <string>
 #include <vector>
 
@@ -18,7 +19,7 @@ public:
     using iterator = BookContainer::iterator;
     using const_iterator = BookContainer::const_iterator;
 
-    using AuthorContainer = std::vector<std::string>;
+    using AuthorContainer = std::flat_set<std::string>;
 
     BookDatabase() = default;
 
@@ -28,14 +29,12 @@ public:
     }
 
     void PushBack(const Book &book) {
-        if (std::count(authors_.begin(), authors_.end(), book.author) == 0)
-            authors_.push_back(static_cast<std::string>(book.author));
+        authors_.insert(static_cast<std::string>(book.author));
         books_.push_back(book);
     }
 
     void PushBack(Book &&book) {
-        if (std::count(authors_.begin(), authors_.end(), book.author) == 0)
-            authors_.push_back(static_cast<std::string>(book.author));
+        authors_.insert(static_cast<std::string>(book.author));
         books_.push_back(std::move(book));
     }
 
@@ -44,8 +43,7 @@ public:
         // TODO: прояснить строчки и отсуствие наличие &&
         auto arg_tuple = std::forward_as_tuple(std::forward<Args>(args)...);
         auto &&author_arg = std::get<1>(arg_tuple);
-        if (std::find(authors_.begin(), authors_.end(), author_arg) == authors_.end())
-            authors_.push_back(std::string(author_arg));
+        authors_.insert(static_cast<std::string>(author_arg));
         books_.emplace_back(std::forward<Args>(args)...);
     }
 

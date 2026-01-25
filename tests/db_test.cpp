@@ -9,13 +9,9 @@ namespace {
 
 TEST(BookDatabaseTypes, TypeAliasesExist) {
     BookDatabase<> db;
-
     BookDatabase<>::iterator it = db.begin();
     BookDatabase<>::const_iterator cit = db.begin();
-
     BookDatabase<>::AuthorContainer authors;
-    authors.push_back("Test");
-
     SUCCEED();
 }
 
@@ -42,7 +38,7 @@ TEST(BookDatabaseBasic, PushBackAddsUniqueAuthorOnlyOnce) {
     db.PushBack({"Animal Farm", "George Orwell", 1945, Genre::Fiction, 4.4, 143});
 
     EXPECT_EQ(db.GetAuthors().size(), 1u);
-    EXPECT_EQ(db.GetAuthors()[0], "George Orwell");
+    EXPECT_EQ(*db.GetAuthors().begin(), "George Orwell");
 }
 
 TEST(BookDatabaseBasic, EmplaceBackWorks) {
