@@ -22,7 +22,7 @@
 
 namespace bookdb {
 
-auto buildAuthorHistogramFlat(std::span<Book> cont) {
+inline auto buildAuthorHistogramFlat(std::span<Book> cont) -> std::flat_map<std::string_view, size_t> {
     std::flat_map<std::string_view, size_t> counts;
     for (const auto &book : cont) {
         auto [iter, is_inserted] = counts.try_emplace(book.author, 0);
@@ -63,7 +63,7 @@ auto filterBooks(Iterator begin, Iterator end, Predicate predicate) {
     return vec;
 };
 
-auto calculateAverageRating(std::span<const Book> s) {
+inline auto calculateAverageRating(std::span<const Book> s) -> double {
     if (s.size() == 0)
         return 0.0;
     const double sum =
