@@ -39,8 +39,9 @@ public:
     }
 
     template <class... Args>
-    void EmplaceBack(Args &&...args) {
-        // TODO: прояснить строчки и отсуствие наличие &&
+    void EmplaceBack(Args &&...args)
+        requires std::constructible_from<Book, Args &&...>
+    {
         auto arg_tuple = std::forward_as_tuple(std::forward<Args>(args)...);
         auto &&author_arg = std::get<1>(arg_tuple);
         authors_.insert(static_cast<std::string>(author_arg));
