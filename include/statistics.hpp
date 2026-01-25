@@ -22,7 +22,7 @@
 
 namespace bookdb {
 
-inline auto buildAuthorHistogramFlat(std::span<Book> cont) -> std::flat_map<std::string_view, size_t> {
+inline auto buildAuthorHistogramFlat(std::span<const Book> cont) -> std::flat_map<std::string_view, size_t> {
     std::flat_map<std::string_view, size_t> counts;
     for (const auto &book : cont) {
         auto [iter, is_inserted] = counts.try_emplace(book.author, 0);
