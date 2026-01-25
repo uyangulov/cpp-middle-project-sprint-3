@@ -22,7 +22,7 @@
 
 namespace bookdb {
 
-inline auto buildAuthorHistogramFlat(std::span<const Book> cont) -> std::flat_map<std::string_view, size_t> {
+inline auto buildAuthorHistogramFlat(std::span<const Book> cont) {
     std::flat_map<std::string_view, size_t> counts;
     for (const auto &book : cont) {
         auto [iter, is_inserted] = counts.try_emplace(book.author, 0);
@@ -57,9 +57,7 @@ template <BookIterator Iterator, BookPredicate Predicate>
 auto filterBooks(Iterator begin, Iterator end, Predicate predicate) {
     std::vector<std::reference_wrapper<const Book>> vec;
     vec.reserve(std::distance(begin, end));
-    for (auto it = begin; it != end; ++it)
-        if (predicate(*it))
-            vec.emplace_back(*it);
+    std::copy_if(begin, end, std::back_inserter(vec), [&](const Book &b) { return predicate(b); });
     return vec;
 };
 
