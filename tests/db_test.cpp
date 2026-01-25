@@ -35,10 +35,19 @@ TEST(BookDatabaseBasic, PushBackAddsUniqueAuthorOnlyOnce) {
     BookDatabase<> db;
 
     db.PushBack({"1984", "George Orwell", 1949, Genre::SciFi, 4.0, 190});
-    db.PushBack({"Animal Farm", "George Orwell", 1945, Genre::Fiction, 4.4, 143});
-
+    db.EmplaceBack("Animal Farm", "George Orwell", 1945, Genre::Fiction, 4.4, 143);
+    {
+        std::string s = "George Orwell";
+        db.EmplaceBack("A", s, 1949, Genre::SciFi, 4., 190);
+    }
+    {
+        std::string s = "George Orwell";
+        db.PushBack({"B", s, 1949, Genre::SciFi, 4., 190});
+    }
     EXPECT_EQ(db.GetAuthors().size(), 1u);
     EXPECT_EQ(*db.GetAuthors().begin(), "George Orwell");
+    EXPECT_EQ(*std::next(db.GetAuthors().begin(), 1), "George Orwell");
+    EXPECT_EQ(*std::next(db.GetAuthors().begin(), 2), "George Orwell");
 }
 
 TEST(BookDatabaseBasic, EmplaceBackWorks) {
