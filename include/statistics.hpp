@@ -18,6 +18,7 @@
 #include <map>
 #include <print>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace bookdb {
@@ -32,23 +33,37 @@ inline auto buildAuthorHistogramFlat(std::span<const Book> cont) {
 }
 
 template <BookIterator Iterator>
-auto calculateGenreRatings(Iterator begin, Iterator end) {
-    std::flat_map<Genre, double> sums;
-    std::flat_map<Genre, size_t> counts;
+auto calculateGenreRatings1(Iterator begin, Iterator end) {
+    struct OnlineData {
+        double avg = 0.0;
+        size_t count = 0;
+    };
+
+    std::flat_map<Genre, OnlineData> data;
 
     for (auto it = begin; it != end; ++it) {
-        Genre key = it->genre;
-        auto [sum_iter, _1] = sums.try_emplace(key, 0.0);
-        auto [count_iter, _2] = counts.try_emplace(key, 0);
-        sum_iter->second += it->rating;
-        count_iter->second++;
+        auto &entry = data[it->genre];
+        entry.count++;
+        entry.avg += (it->rating - entry.avg) / entry.count;
+    }
+    std::flat_map<Genre, double> averages;
+    for (auto &[genre, entry] : data) {
+        averages[genre] = entry.avg;
     }
 
+    return averages;
+}
+
+template <BookIterator Iterator>
+auto calculateGenreRatings(Iterator begin, Iterator end) {
     std::flat_map<Genre, double> averages;
-    for (const auto &p : counts) {
-        Genre genre = p.first;
-        auto sum_iter = sums.find(genre);
-        averages[genre] = sum_iter->second / p.second;
+    std::flat_map<Genre, size_t> counts;
+    for (auto it = begin; it != end; ++it) {
+        Genre key = it->genre;
+        auto [averages_iter, _1] = averages.try_emplace(key, 0.0);
+        auto [count_iter, _2] = counts.try_emplace(key, 0);
+        count_iter->second++;
+        averages_iter->second += (it->rating - averages_iter->second) / count_iter->second;
     }
     return averages;
 }
