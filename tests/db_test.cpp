@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <string>
 
 #include "book.hpp"
 #include "book_database.hpp"

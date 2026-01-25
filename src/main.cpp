@@ -7,7 +7,6 @@
 #include "statistics.hpp"
 #include <format>
 #include <iostream>
-#include <string>
 #include <vector>
 
 using namespace bookdb;
