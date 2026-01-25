@@ -53,7 +53,7 @@ public:
 
     const BookContainer &GetBooks() const { return books_; }
 
-    size_t size() const { return authors_.size(); }
+    size_t size() const { return books_.size(); }
 
     const_iterator begin() const { return books_.begin(); }
 
