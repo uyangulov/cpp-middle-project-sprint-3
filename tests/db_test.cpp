@@ -10,7 +10,6 @@ namespace {
 TEST(BookDatabaseTypes, TypeAliasesExist) {
     BookDatabase<> db;
 
-    // просто проверка существования типов
     BookDatabase<>::iterator it = db.begin();
     BookDatabase<>::const_iterator cit = db.begin();
 
