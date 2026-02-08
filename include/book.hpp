@@ -13,8 +13,8 @@ static constexpr std::array<std::string_view, static_cast<std::size_t>(Genre::CO
     "Unknown"sv, "Fiction"sv, "NonFiction"sv, "SciFi"sv, "Biography"sv, "Mystery"sv};
 
 constexpr Genre GenreFromString(std::string_view s) {
-    auto it = std::ranges::find(genre_to_string, s);
-    std::size_t index = std::ranges::distance(genre_to_string.begin(), it);
+    const auto it = std::ranges::find(genre_to_string, s);
+    const std::size_t index = std::ranges::distance(genre_to_string.begin(), it);
     return static_cast<Genre>(index);
 }
 
