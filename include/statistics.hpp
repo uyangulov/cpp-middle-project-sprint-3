@@ -6,20 +6,14 @@
 #include <functional>
 #include <iterator>
 #include <numeric>
-#include <random>
 #include <span>
-#include <stdexcept>
 #include <string_view>
 
 #include "book.hpp"
-#include "book_database.hpp"
 #include "concepts.hpp"
 #include "heterogeneous_lookup.hpp"
 
-#include <map>
 #include <print>
-#include <unordered_map>
-#include <utility>
 #include <vector>
 
 namespace bookdb {
