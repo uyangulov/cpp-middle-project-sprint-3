@@ -6,32 +6,16 @@
 
 namespace bookdb {
 
-enum class Genre { Fiction, NonFiction, SciFi, Biography, Mystery, Unknown };
+using namespace std::literals::string_view_literals;
+enum class Genre { Unknown = 0, Fiction, NonFiction, SciFi, Biography, Mystery, COUNT };
 
-// Ваш код для constexpr преобразования строк в enum::Genre и наоборот здесь
+static constexpr std::array<std::string_view, static_cast<std::size_t>(Genre::COUNT)> genre_to_string = {
+    "Unknown"sv, "Fiction"sv, "NonFiction"sv, "SciFi"sv, "Biography"sv, "Mystery"sv};
 
 constexpr Genre GenreFromString(std::string_view s) {
-
-    if (s == "Fiction")
-        return Genre::Fiction;
-    if (s == "NonFiction")
-        return Genre::NonFiction;
-    if (s == "Non-Fiction")
-        return Genre::NonFiction;
-    if (s == "Non Fiction")
-        return Genre::NonFiction;
-    if (s == "SciFi")
-        return Genre::SciFi;
-    if (s == "Sci-Fi")
-        return Genre::SciFi;
-    if (s == "ScienceFiction")
-        return Genre::SciFi;
-    if (s == "Biography")
-        return Genre::Biography;
-    if (s == "Mystery")
-        return Genre::Mystery;
-
-    return Genre::Unknown;
+    auto it = std::ranges::find(genre_to_string, s);
+    std::size_t index = std::ranges::distance(genre_to_string.begin(), it);
+    return static_cast<Genre>(index);
 }
 
 struct Book {
