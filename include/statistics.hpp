@@ -33,28 +33,6 @@ inline auto buildAuthorHistogramFlat(std::span<const Book> cont) {
 }
 
 template <BookIterator Iterator>
-auto calculateGenreRatings1(Iterator begin, Iterator end) {
-    struct OnlineData {
-        double avg = 0.0;
-        size_t count = 0;
-    };
-
-    std::flat_map<Genre, OnlineData> data;
-
-    for (auto it = begin; it != end; ++it) {
-        auto &entry = data[it->genre];
-        entry.count++;
-        entry.avg += (it->rating - entry.avg) / entry.count;
-    }
-    std::flat_map<Genre, double> averages;
-    for (auto &[genre, entry] : data) {
-        averages[genre] = entry.avg;
-    }
-
-    return averages;
-}
-
-template <BookIterator Iterator>
 auto calculateGenreRatings(Iterator begin, Iterator end) {
     std::flat_map<Genre, double> averages;
     std::flat_map<Genre, size_t> counts;
