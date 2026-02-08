@@ -14,6 +14,7 @@
 #include "book.hpp"
 #include "book_database.hpp"
 #include "concepts.hpp"
+#include "heterogeneous_lookup.hpp"
 
 #include <map>
 #include <print>
@@ -23,8 +24,9 @@
 
 namespace bookdb {
 
-inline auto buildAuthorHistogramFlat(std::span<const Book> cont) {
-    std::flat_map<std::string_view, size_t> counts;
+template <typename Comparator = TransparentStringLess>
+auto buildAuthorHistogramFlat(std::span<const Book> cont) {
+    std::flat_map<std::string_view, size_t, Comparator> counts;
     for (const auto &book : cont) {
         auto [iter, is_inserted] = counts.try_emplace(book.author, 0);
         ++iter->second;
